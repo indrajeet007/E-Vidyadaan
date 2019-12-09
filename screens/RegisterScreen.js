@@ -4,7 +4,7 @@ import { Text, View } from 'react-native'
 export class RegisterScreen extends Component {
     render() {
         return (
-            <View>
+            <View style={{justifyContent:'center', alignItems:'center', backgroundColor:'red'}}>
                 <Text> textInComponent </Text>
             </View>
         )

@@ -4,6 +4,6 @@ import RegisterScreen from '../screens/RegisterScreen';
 
 
 export default AuthStack = createStackNavigator({
-    Login: LoginScreen,
-    Register: RegisterScreen
+    Login: {screen: LoginScreen},
+    Register: {screen: RegisterScreen}
 })

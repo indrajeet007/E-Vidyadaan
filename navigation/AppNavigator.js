@@ -1,8 +1,4 @@
-import { createAppContainer } from "react-navigation";
+import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import AuthStack from "./AuthStackNavigator";
 
-
-export default createAppContainer({
-    AuthStack
-});
-
+export default createAppContainer(AuthStack);
