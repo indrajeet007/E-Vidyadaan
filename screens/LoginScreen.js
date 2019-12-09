@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
-import {registerUser} from '../services/User.service';
+import { Input, Button } from 'react-native-elements'
 
 export class LoginScreen extends Component {
-
 
     state = {
         user: {}
@@ -16,10 +15,9 @@ export class LoginScreen extends Component {
     componentDidMount() {
         console.log("component mounted")
         let tempUser = {
-            username: 'indrajeet4',
-            email:'indrajeet4@asd.com',
-            password: '69420',
-            role: ''
+            username: 'indrajeet5',
+            email:'indrajeet5@asd.com',
+            password: '6942055'
         } 
 
         this.setState({
@@ -29,31 +27,35 @@ export class LoginScreen extends Component {
         
     }
 
-  
-
-
     _redirectToRegister  = () => {
-        // const {navigation} = this.props
-        // console.log("redirect Pressed", navigation)
-        // navigation.navigate("Register")
+        const {navigation} = this.props
+        console.log("redirect Pressed", navigation)
+        navigation.navigate("Register")
 
-        registerUser(this.state.user)
-        .then(res => {
-            console.log("data coming from backend is ===> ",res.data)
-        })
-        .catch(err => {
-            console.log("error ==>", err)
-        })
+        // .then(res => {
+        //     console.log("data coming from backend is ===> ",res.data)
+        // })
+        // .catch(err => {
+        //     console.log("error ==>", err)
+        // })
+    }
+
+    _redirectToMain = () => {
+
     }
 
     render() {
         return (
-            <View style={{flex: 1, justifyContent:'center', alignItems:'center', backgroundColor:'green'}}>
-                <Text> textInComponent asdasdasdasd</Text>
-
-                <TouchableOpacity onPress={() => this._redirectToRegister()}>
-                    <Text>Register Screen</Text>
-                </TouchableOpacity>
+            <View style={{flex: 1, flexDirection: 'column', justifyContent:'space-around', alignItems:'center', backgroundColor:'teal', paddingTop: 200}}>
+                <View style={{ flex: 1, width: 300, height: 50, paddingBottom: 50 }}>
+                    <Text style={{textAlign: 'center', fontSize: 25, paddingBottom: 20}}>Login</Text>
+                    <Input label='Enter Email' placeholder='email@address.com'/>
+                    <Input label='Enter Password' placeholder='Password'/>
+                </View>
+                <View style={{ flex: 2, width: 150, height: 50 }}>
+                    <Button raised onPress={() => this._redirectToMain()} title="Login"/>
+                    <Button onPress={() => this._redirectToRegister()} type="clear" title="Register"/>
+                </View>
             </View>
         )
     }
