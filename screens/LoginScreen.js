@@ -14,22 +14,22 @@ export class LoginScreen extends Component {
 
     componentDidMount() {
         console.log("component mounted")
-        let tempUser = {
-            username: 'indrajeet5',
-            email:'indrajeet5@asd.com',
-            password: '6942055'
-        } 
+        // let tempUser = {
+        //     username: 'indrajeet5',
+        //     email:'indrajeet5@asd.com',
+        //     password: '6942055'
+        // } 
 
-        this.setState({
-            user:tempUser
-        }, () => console.log("user is from component ==>", this.state.user))
+        // this.setState({
+        //     user:tempUser
+        // }, () => console.log("user is from component ==>", this.state.user))
 
         
     }
 
     _redirectToRegister  = () => {
         const {navigation} = this.props
-        console.log("redirect Pressed", navigation)
+        // console.log("redirect Pressed", navigation)
         navigation.navigate("Register")
 
         // .then(res => {
@@ -41,7 +41,7 @@ export class LoginScreen extends Component {
     }
 
     _redirectToMain = () => {
-
+        
     }
 
     render() {
