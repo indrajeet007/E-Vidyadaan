@@ -1,9 +1,9 @@
 import Axios from 'axios'
-import {server} from '../util/Env.util';
+import { server } from '../util/Env.util';
 
-export function registerUser(user)  {
+export function registerUser(user) {
     // console.log("in registerUser function", user)
-   return Axios.post(`${server}/auth/local/register`, user)
+    return Axios.post(`${server}/auth/local/register`, user)
 }
 
 export function loginUser(user) {
