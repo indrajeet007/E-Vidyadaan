@@ -7,9 +7,10 @@ import {
   ActivityIndicator
 } from "react-native";
 import { Input, Button } from "react-native-elements";
-import { registerUser } from "../services/User.service";
+import { registerUser, userRoles } from "../services/User.service";
 import { decodeJWT, setToStore } from "../util/Token.util";
 import { AppLoading } from "expo";
+import Axios from "axios";
 
 export class RegisterScreen extends Component {
   state = {
@@ -17,14 +18,37 @@ export class RegisterScreen extends Component {
     password: "",
     error: "",
     user: {},
-    loading: false
+    loading: false,
+    role: ""
   };
 
   constructor(props) {
     super(props);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    userRoles()
+      .then(res => {
+        let roles = res.data.roles
+
+        // console.log('Roles All: ', roles)
+        // console.log('Roles Length: ', roles.length)
+
+        let i = 0
+
+        for(i; i<=roles.length; i++) {
+          console.log('Role Name ===>', roles[i].name)
+          console.log('Role ID ===>', roles[i].id)
+          
+          if(roles[i].name === "User") {
+            this.setState({
+              role: roles[i].id
+            }, () => console.log('Role ID after setState: ', this.state.role))
+            break
+          }
+        }
+      })
+  }
 
   _handleEmailChange = email => {
     this.setState({ email: email });
@@ -39,8 +63,13 @@ export class RegisterScreen extends Component {
     const userData = {
       email: this.state.email,
       password: this.state.password,
-      username: this.state.email.replace(/@[^@]+$/, "")
+      username: this.state.email.replace(/@[^@]+$/, ""),
+      role: {
+        id: this.state.role
+      }
     };
+
+    console.log('userData: ', userData)
 
     this.setState({
       loading: true
@@ -50,6 +79,7 @@ export class RegisterScreen extends Component {
       .then(res => {
         userResponse = res.data.user;
         // decodedJWT = decodeJWT(res.data.jwt);
+        console.log('userResponse: ', res.data)
         this.setState({
           user: res.data.user,
           loading: false
@@ -60,12 +90,12 @@ export class RegisterScreen extends Component {
             navigation.navigate("Profile", { user: this.state.user });
           })
           .catch(err => {
-            console.error("erro setting token", err);
+            console.error("error setting token at register", err);
             this.setState({
               error: "Please Try To Login",
               loading: false
-            });
           });
+        });
       })
       .catch(err => {
         this.setState({

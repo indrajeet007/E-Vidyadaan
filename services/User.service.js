@@ -8,3 +8,7 @@ export function registerUser(user) {
 export function loginUser(user) {
   return Axios.post(`${server}/auth/local`, user);
 }
+
+export function userRoles() {
+  return Axios.get(`${server}/users-permissions/roles`)
+}
