@@ -12,3 +12,8 @@ export function loginUser(user) {
 export function userRoles() {
   return Axios.get(`${server}/users-permissions/roles`)
 }
+
+
+export function editUser(id, user) {
+  return Axios.put(`${server}/users/${id}`, user)
+}
