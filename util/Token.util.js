@@ -15,3 +15,7 @@ export function setToStore(jwt) {
 export function getFromStore(jwt) {
     return SecureStorage.getItemAsync(USER_KEY)
 }
+
+export function deleteFromStore() {
+  return SecureStorage.deleteItemAsync(USER_KEY)
+}
