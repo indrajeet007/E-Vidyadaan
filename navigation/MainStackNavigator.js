@@ -5,5 +5,5 @@ import ServiceListScreen from '../screens/ServiceListScreen';
 
 export default MainStack = createStackNavigator({
     Profile: {screen: ProfileScreen},
-    ServiceList: {screen: ServiceListScreen}
+    ServiceList: {screen: ServiceListScreen},
 })

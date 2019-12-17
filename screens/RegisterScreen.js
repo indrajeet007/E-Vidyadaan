@@ -25,11 +25,15 @@ export class RegisterScreen extends Component {
     fullName:"",
     email: "",
     password: "",
-    cpassword: "",
+    passwordConfirmation: "",
     error: "",
     user: {},
+    role: "",
     loading: false,
-    role: ""
+    isNameValid: true,
+    isEmailValid: true,
+    isPasswordValid: true,
+    isConfirmationValid: true,
   };
 
   constructor(props) {
@@ -74,12 +78,20 @@ export class RegisterScreen extends Component {
     this.setState({ password: password });
   };
 
-  _handleCpasswordChange = cpassword => {
-    this.setState({ cpassword: cpassword });
+  _handlePasswordConfirmationChange = passwordConfirmation => {
+    this.setState({ passwordConfirmation: passwordConfirmation });
   };
 
   _RegisterUser = async () => {
     const { navigation } = this.props;
+    
+    this.setState({
+      isNameValid:this.state.fullName.length>0 || this.nameInput.shake(),
+      isEmailValid: this.state.email.length > 0 || this.emailInput.shake(),
+      isPasswordValid: this.state.password.length >= 6 || this.passwordInput.shake(),
+      isConfirmationValid: this.state.password === this.state.passwordConfirmation || this.confirmationInput.shake(),
+    })
+
     const userData = {
       email: this.state.email,
       password: this.state.password,
@@ -137,6 +149,7 @@ export class RegisterScreen extends Component {
 
   render() {
     const { error, loading } = this.state;
+    const { isNameValid, isEmailValid, isPasswordValid, isConfirmationValid } = this.state;
     const { containerRoot,inputContainer } = styles
     const theme = {
       colors:{
@@ -153,7 +166,7 @@ export class RegisterScreen extends Component {
           {loading == true && <ActivityIndicator size="large" color="#0000ff" />}
           <Card title = "User Register" containerStyle = {{borderRadius: 6}}>
             <Input
-              placeholder="EnterFull Name"
+              placeholder="Enter Full Name"
               inputContainerStyle={inputContainer}
               leftIconContainerStyle={{
                 marginRight: 10,
@@ -162,6 +175,13 @@ export class RegisterScreen extends Component {
               onChangeText={this._handleFullNameChange}
               value={this.state.fullName}
               autoCapitalize="words"
+              ref={input => (this.nameInput = input)}
+              onSubmitEditing={() => this.emailInput.focus()}
+              errorMessage={
+                isNameValid
+                  ? null
+                  : 'Please enter name'
+              }
             />
             <Input
               placeholder="Enter E-mail"
@@ -174,6 +194,11 @@ export class RegisterScreen extends Component {
               value={this.state.email}
               autoCapitalize="none"
               keyboardType="email-address"
+              ref={input => (this.emailInput = input)}
+              onSubmitEditing={() => this.passwordInput.focus()}
+              errorMessage={
+                isEmailValid ? null : 'Please enter a valid email address'
+              }
             />
             <Input
               placeholder="Enter Password"
@@ -186,6 +211,13 @@ export class RegisterScreen extends Component {
               value={this.state.password}
               autoCapitalize="none"
               secureTextEntry={true}
+              ref={input => (this.passwordInput = input)}
+              onSubmitEditing={() => this.confirmationInput.focus()}
+              errorMessage={
+                isPasswordValid
+                  ? null
+                  : 'Please enter at least 6 characters'
+              }
             />
             <Input
               placeholder="Confirm Password"
@@ -194,12 +226,18 @@ export class RegisterScreen extends Component {
                 marginRight: 10,
               }}
               leftIcon={{name: 'lock-outline'}}
-              onChangeText={this._handleCpasswordChange}
-              value={this.state.cpassword}
+              onChangeText={this._handlePasswordConfirmationChange}
+              value={this.state.passwordConfirmation}
               autoCapitalize="none"
               secureTextEntry={true}
               blurOnSubmit={true}
               returnKeyType="done"
+              ref={input => (this.confirmationInput = input)}
+              errorMessage={
+                isConfirmationValid
+                  ? null
+                  : 'Please enter the same password'
+              }
             />
           </Card>
           <View style={{ flex: 2, alignItems: 'stretch',  margin: 20 }}>
@@ -209,8 +247,8 @@ export class RegisterScreen extends Component {
             />
           </View>
           {error !== "" && (
-            <View style={{ flex: 2, width: 150, height: 50 }}>
-              <Text>{error}</Text>
+            <View style={{ flex: 2, width: 150, height: 50, alignSelf: 'center' }} >
+              <Text style={{alignSelf: 'center', color: 'red'}} > {error} </Text>
             </View>
           )}
         </View>
