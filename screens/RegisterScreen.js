@@ -6,15 +6,26 @@ import {
   AsyncStorage,
   ActivityIndicator
 } from "react-native";
-import { Input, Button } from "react-native-elements";
+import { ThemeProvider, Input, Button, Card } from "react-native-elements";
 import { registerUser, userRoles, editUser } from "../services/User.service";
 import { decodeJWT, setToStore } from "../util/Token.util";
+import styles from '../util/styles'
 
 
 export class RegisterScreen extends Component {
+  static navigationOptions = {
+    title: "Register",
+    headerTintColor:"#fff",
+    headerStyle:{
+      backgroundColor:"#673ab7"
+    },
+  }
+
   state = {
+    fullName:"",
     email: "",
     password: "",
+    cpassword: "",
     error: "",
     user: {},
     loading: false,
@@ -51,6 +62,10 @@ export class RegisterScreen extends Component {
     });
   }
 
+  _handleFullNameChange = fullName => {
+    this.setState({ fullName: fullName });
+  };
+
   _handleEmailChange = email => {
     this.setState({ email: email });
   };
@@ -59,12 +74,17 @@ export class RegisterScreen extends Component {
     this.setState({ password: password });
   };
 
+  _handleCpasswordChange = cpassword => {
+    this.setState({ cpassword: cpassword });
+  };
+
   _RegisterUser = async () => {
     const { navigation } = this.props;
     const userData = {
       email: this.state.email,
       password: this.state.password,
-      username: this.state.email.replace(/@[^@]+$/, "")
+      //username: this.state.email.replace(/@[^@]+$/, "")
+      username: this.state.fullName
     };
 
     console.log("userData: ", userData);
@@ -117,49 +137,84 @@ export class RegisterScreen extends Component {
 
   render() {
     const { error, loading } = this.state;
+    const { containerRoot,inputContainer } = styles
+    const theme = {
+      colors:{
+        primary: "#673ab7",
+      },
+      Icon:{
+        size: 22,
+        color: "#333",
+      },
+    }
     return (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: "column",
-          justifyContent: "space-around",
-          alignItems: "center",
-          backgroundColor: "teal",
-          paddingTop: 200
-        }}
-      >
-        {loading == true && <ActivityIndicator size="large" color="#0000ff" />}
-        <View style={{ flex: 1, width: 300, height: 50, paddingBottom: 50 }}>
-          <Text
-            style={{ textAlign: "center", fontSize: 25, paddingBottom: 20 }}
-          >
-            Register
-          </Text>
-          <Input
-            onChangeText={this._handleEmailChange}
-            value={this.state.email}
-            label="Enter Email"
-            placeholder="email@address.com"
-            autoCapitalize="none"
-          />
-          <Input
-            onChangeText={this._handlePasswordChange}
-            value={this.state.password}
-            label="Enter Password"
-            placeholder="Password"
-            autoCapitalize="none"
-            secureTextEntry={true}
-          />
-        </View>
-        <View style={{ flex: 2, width: 150, height: 50 }}>
-          <Button onPress={() => this._RegisterUser()} title="Register" />
-        </View>
-        {error !== "" && (
-          <View style={{ flex: 2, width: 150, height: 50 }}>
-            <Text>{error}</Text>
+      <ThemeProvider theme = {theme}>
+        <View style={containerRoot}>
+          {loading == true && <ActivityIndicator size="large" color="#0000ff" />}
+          <Card title = "User Register" containerStyle = {{borderRadius: 6}}>
+            <Input
+              placeholder="EnterFull Name"
+              inputContainerStyle={inputContainer}
+              leftIconContainerStyle={{
+                marginRight: 10,
+              }}
+              leftIcon={{name: 'person-outline'}}
+              onChangeText={this._handleFullNameChange}
+              value={this.state.fullName}
+              autoCapitalize="words"
+            />
+            <Input
+              placeholder="Enter E-mail"
+              inputContainerStyle={inputContainer}
+              leftIconContainerStyle={{
+                marginRight: 10,
+              }}
+              leftIcon={{name: 'mail'}}
+              onChangeText={this._handleEmailChange}
+              value={this.state.email}
+              autoCapitalize="none"
+              keyboardType="email-address"
+            />
+            <Input
+              placeholder="Enter Password"
+              inputContainerStyle={inputContainer}
+              leftIconContainerStyle={{
+                marginRight: 10,
+              }}
+              leftIcon={{name: 'lock-outline'}}
+              onChangeText={this._handlePasswordChange}
+              value={this.state.password}
+              autoCapitalize="none"
+              secureTextEntry={true}
+            />
+            <Input
+              placeholder="Confirm Password"
+              inputContainerStyle={inputContainer}
+              leftIconContainerStyle={{
+                marginRight: 10,
+              }}
+              leftIcon={{name: 'lock-outline'}}
+              onChangeText={this._handleCpasswordChange}
+              value={this.state.cpassword}
+              autoCapitalize="none"
+              secureTextEntry={true}
+              blurOnSubmit={true}
+              returnKeyType="done"
+            />
+          </Card>
+          <View style={{ flex: 2, alignItems: 'stretch',  margin: 20 }}>
+            <Button 
+              title="Register"
+              onPress={() => this._RegisterUser()} 
+            />
           </View>
-        )}
-      </View>
+          {error !== "" && (
+            <View style={{ flex: 2, width: 150, height: 50 }}>
+              <Text>{error}</Text>
+            </View>
+          )}
+        </View>
+      </ThemeProvider>
     );
   }
 }

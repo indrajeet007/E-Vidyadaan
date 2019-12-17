@@ -1,10 +1,20 @@
 import React, { Component } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
-import { Input, Button } from "react-native-elements";
+import { ThemeProvider,Input, Button, Card } from "react-native-elements";
 import { loginUser } from "../services/User.service";
 import { setToStore } from "../util/Token.util";
+import styles from '../util/styles'
 
 export class LoginScreen extends Component {
+  
+  static navigationOptions = {
+    title: "Login",
+    headerTintColor:"#fff",
+    headerStyle:{
+      backgroundColor:"#673ab7"
+    },
+  }
+
   state = {
     user: {},
     email: "",
@@ -75,46 +85,71 @@ export class LoginScreen extends Component {
 
   render() {
     const { error, loading } = this.state
+    const { containerRoot,inputContainer } = styles
+    const theme = {
+      colors:{
+        primary: "#673ab7",
+      },
+      Icon:{
+        size: 22,
+        color: "#333",
+      },
+    }
     return (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: "column",
-          justifyContent: "space-around",
-          alignItems: "center",
-          backgroundColor: "teal",
-          paddingTop: 200
-        }}
-      >
-        <View style={{ flex: 1, width: 300, height: 50, paddingBottom: 50 }}>
-          <Text
-            style={{ textAlign: "center", fontSize: 25, paddingBottom: 20 }}
-          >
-            Login
-          </Text>
-          <Input 
-            value={this.state.email} 
-            onChangeText={this._handleEmailChange}
-            autoCapitalize="none"
-            label="Enter Email" 
-            placeholder="email@address.com" />
-          <Input 
-            value={this.state.password} 
-            onChangeText={this._handlePasswordChange}
-            autoCapitalize="none"
-            secureTextEntry={true} 
-            label="Enter Password" 
-            placeholder="Password" />
+      <ThemeProvider theme = { theme }>
+        <View style={containerRoot}>
+          <Card title = "User Sign in" containerStyle = {{borderRadius: 6}} >
+            <Input 
+              inputContainerStyle={inputContainer}
+              leftIconContainerStyle={{
+                marginRight: 10,
+              }}
+              leftIcon={{name: 'mail' }}
+              placeholder="Enter E-mail" 
+              value={this.state.email} 
+              onChangeText={this._handleEmailChange}
+              autoCapitalize="none"
+              keyboardType="email-address" 
+            />
+            <Input 
+              inputContainerStyle = {inputContainer}
+              leftIconContainerStyle={{
+                marginRight: 10,
+              }}
+              leftIcon={{name: 'lock-outline' }}
+              placeholder="Enter Password" 
+              value={this.state.password} 
+              onChangeText={this._handlePasswordChange}
+              autoCapitalize="none"
+              autoCorrect={false}
+              secureTextEntry={true} 
+              blurOnSubmit={true}
+              returnKeyType="done"
+            />
+          </Card>
+
+          <View style={{ flex: 3, alignItems: 'stretch',  margin: 20}}>
+            <Button 
+              raised 
+              title="Login" 
+              containerStyle={{marginBottom: 10}}
+              onPress={() => this._redirectToMain()} 
+            />
+            <Button
+              title="Forgot password?"
+              containerStyle={{marginBottom: 10}}
+              onPress={() => this._redirectToRegister()}
+              type="outline"
+            />
+            <Button
+              title="Register"
+              containerStyle={{marginBottom: 10}}
+              onPress={() => this._redirectToRegister()}
+              type="outline"
+            />
+          </View>
         </View>
-        <View style={{ flex: 2, width: 150, height: 50 }}>
-          <Button raised onPress={() => this._redirectToMain()} title="Login" />
-          <Button
-            onPress={() => this._redirectToRegister()}
-            type="clear"
-            title="Register"
-          />
-        </View>
-      </View>
+      </ThemeProvider>
     );
   }
 }
