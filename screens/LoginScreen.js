@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import { View } from "react-native";
 import { ThemeProvider,Input, Button, Card } from "react-native-elements";
 import { loginUser } from "../services/User.service";
 import { setToStore } from "../util/Token.util";
@@ -20,7 +20,9 @@ export class LoginScreen extends Component {
     email: "",
     password: "",
     loading: false,
-    error: ""
+    error: "",
+    isEmailValid: true,
+    isPasswordValid: true,
   };
 
   constructor(props) {
@@ -37,6 +39,11 @@ export class LoginScreen extends Component {
     this.setState({ password: password });
   };
 
+  _redirectToForgotPassword = () => {
+    const { navigation } = this.props;
+    navigation.navigate("ForgotPassword");
+  };
+
   _redirectToRegister = () => {
     const { navigation } = this.props;
     navigation.navigate("Register");
@@ -44,6 +51,11 @@ export class LoginScreen extends Component {
 
   _redirectToMain = () => {
     const { navigation } = this.props
+
+    this.setState({
+      isEmailValid: this.state.email.length > 0 || this.emailInput.shake(),
+      isPasswordValid: this.state.password.length >= 6 || this.passwordInput.shake(),
+    })
 
     const loginData = {
       identifier: this.state.email,
@@ -84,7 +96,7 @@ export class LoginScreen extends Component {
   };
 
   render() {
-    const { error, loading } = this.state
+    const { isEmailValid, isPasswordValid, } = this.state;
     const { containerRoot,inputContainer } = styles
     const theme = {
       colors:{
@@ -110,6 +122,11 @@ export class LoginScreen extends Component {
               onChangeText={this._handleEmailChange}
               autoCapitalize="none"
               keyboardType="email-address" 
+              ref={input => (this.emailInput = input)}
+              onSubmitEditing={() => this.passwordInput.focus()}
+              errorMessage={
+                isEmailValid ? null : 'Please enter a valid email address'
+              }
             />
             <Input 
               inputContainerStyle = {inputContainer}
@@ -125,6 +142,12 @@ export class LoginScreen extends Component {
               secureTextEntry={true} 
               blurOnSubmit={true}
               returnKeyType="done"
+              ref={input => (this.passwordInput = input)}
+              errorMessage={
+                isPasswordValid
+                  ? null
+                  : 'Please enter at least 6 characters'
+              }
             />
           </Card>
 
@@ -138,7 +161,7 @@ export class LoginScreen extends Component {
             <Button
               title="Forgot password?"
               containerStyle={{marginBottom: 10}}
-              onPress={() => this._redirectToRegister()}
+              onPress={() => this._redirectToForgotPassword()}
               type="outline"
             />
             <Button
