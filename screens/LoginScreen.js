@@ -77,7 +77,7 @@ export class LoginScreen extends Component {
 
         setToStore(res.data.jwt)
           .then(res => {
-            navigation.navigate("Profile", { user: this.state.user })
+            navigation.navigate("UserBookings", { user: this.state.user })
           })
           .catch(err => {
             console.error("error setting token at login", err)

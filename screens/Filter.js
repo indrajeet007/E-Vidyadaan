@@ -1,118 +1,150 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { Button, Header, Input, Card } from "react-native-elements";
-
-
-
-
+import { ThemeProvider, Button, Input, Card } from "react-native-elements";
+import stylesG from '../util/styles'
 
 export class Filter extends Component {
-
-
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {
+      name : "",
+      category : "",
+      duration : "",
+      isNameValid : true,
+      isCategoryValid : true,
+      isDurationValid : true,
+    }
+  }
 
+  _handleNameChange = name => {
+    this.setState({ name: name });
+  };
+
+  _handleCategoryChange = category => {
+    this.setState({ category: category });
+  };
+
+  _handleDurationChange = duration => {
+    this.setState({ duration: duration });
+  };
+
+  _FetchFilterResult = async () => {
+    const { navigation } = this.props;
+    
+    this.setState({
+      isNameValid:this.state.name.length>0 || this.nameInput.shake(),
+      isCategoryValid: this.state.category.length > 0 || this.categoryInput.shake(),
+      isDurationValid: this.state.duration.length > 0 || this.durationInput.shake(),
+    })
   }
   render() {
+    const { containerRoot, container, inputContainer } = stylesG
+    const { isNameValid, isCategoryValid, isDurationValid } = this.state;
+    const theme = {
+      colors:{
+        primary: "#673ab7",
+      },
+      Icon:{
+        size: 22,
+        color: "#333",
+      },
+    }
     return (
-      <View>
-
-        <Header style={{ height: 20, width: 200 }}
-          placement="left"
-          leftComponent={{ icon: 'menu', color: '#fff' }}
-          centerComponent={{ text: '', style: { color: '#fff' } }}
-          rightComponent={{
-            icon: 'home', color: '#fff'
-          }}
-        />
-        <View style={{ marginTop: 28 }}>
-        </View>
-
-        <Card containerStyle={{
-          height: 320, width: 350, margin: 24, borderRadius: 25,
-          shadowOffset: {
-            width: 0,
-            height: 2
-          }
-        }}>
-          <View style={{ marginTop: 6 }}>
+      <ThemeProvider theme = {theme}>
+        <View>
+          
+          <View style={{ marginTop: 28 }}>
           </View>
 
+          <Card containerStyle={{
+            width: 350, margin: 20, borderRadius: 15,
+            shadowOffset: {
+              width: 0,
+              height: 2
+            }
+          }}>
 
-
-
-          <Text style={{ fontSize: 15, fontWeight: "bold" }}>Name</Text>
-          <Input
-            placeholder=' Maths'
-          />
-          <View style={{ marginTop: 8 }}>
-          </View>
-          <Text style={{ fontSize: 15, fontWeight: "bold" }}>Category</Text>
-          <Input
-            placeholder=' Primary education'
-          />
-          <View style={{ marginTop: 8 }}>
-          </View>
-
-          <Text style={{ fontSize: 15, fontWeight: "bold" }}>Duration</Text>
-          <Input
-            placeholder=' 1 Month'
-          />
-          <View style={styles.confirm}>
-            <Button
-
-              title="Save"
-              color="#ff5c5c"
-              type="solid"
+            <Input
+              label = "Subject name"
+              placeholder = "Maths"
+              containerStyle = {container}
+              inputContainerStyle = {inputContainer}
+              leftIconContainerStyle = {{
+                marginRight: 10,
+              }}
+              leftIcon = {{name: 'person-outline'}}
+              onChangeText = {this._handleNameChange}
+              value = {this.state.name}
+              autoCapitalize = "words"
+              ref = {input => (this.nameInput = input)}
+              onSubmitEditing = {() => this.categoryInput.focus()}
+              errorMessage = {
+                isNameValid
+                  ? null
+                  : 'Please enter name'
+              }
             />
-          </View>
 
-        </Card>
-      </View>
+            <Input
+              label = "Category"
+              placeholder = "Primary Education"
+              containerStyle = {container}
+              inputContainerStyle = {inputContainer}
+              leftIconContainerStyle = {{
+                marginRight: 10,
+              }}
+              leftIcon = {{name: 'format-list-bulleted-type', type: 'material-community'}}
+              onChangeText = {this._handleCategoryChange}
+              value = {this.state.category}
+              autoCapitalize = "words"
+              ref = {input => (this.categoryInput = input)}
+              onSubmitEditing = {() => this.durationInput.focus()}
+              errorMessage = {
+                isCategoryValid
+                  ? null
+                  : 'Please enter category'
+              }
+            />
+
+            <Input
+              label = "Duration"
+              placeholder = "1 months"
+              containerStyle = {container}
+              inputContainerStyle = {inputContainer}
+              leftIconContainerStyle = {{
+                marginRight: 10,
+              }}
+              leftIcon = {{name: 'time-slot', type: 'entypo'}}
+              onChangeText = {this._handleDurationChange}
+              value = {this.state.duration}
+              ref = {input => (this.durationInput = input)}
+              returnKeyType = 'done'
+              errorMessage = {
+                isDurationValid
+                  ? null
+                  : 'Please enter duration'
+              }
+            />
+
+            <View style={styles.confirm}>
+              <Button
+                title="Fetch Results"
+                color="#ff5c5c"
+                type="solid"
+                onPress = {() => this._FetchFilterResult()}
+              />
+            </View>
+          </Card>
+        </View>
+      </ThemeProvider>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  rectangle: {
-
-    width: 329,
-    height: 50,
-    borderRadius: 25,
-    marginTop: 20,
-    marginLeft: 14,
-    backgroundColor: "white",
-    shadowColor: "rgba(0, 0, 0, 0.05)",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowRadius: 5,
-    shadowOpacity: 1,
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderColor: "#ececec"
-  },
-  ngotext: {
-    textAlign: "left",
-    fontSize: 17,
-    fontFamily: "Roboto",
-    fontSize: 14,
-    fontWeight: "500",
-    fontStyle: "normal",
-    lineHeight: 21,
-    letterSpacing: 0,
-    color: "#000000",
-    justifyContent: "space-between"
-  },
   confirm: {
-    width: 107,
     height: 20,
-    borderRadius: 25,
-    marginLeft: 210,
-    marginTop: 32,
-    backgroundColor: "white",
+    margin: 20,
     shadowColor: "rgba(0, 0, 0, 0.05)",
     shadowOffset: {
       width: 0,
@@ -120,10 +152,6 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 10,
     shadowOpacity: 1,
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderColor: "#ececec"
   }
-
 })
 export default Filter;

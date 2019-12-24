@@ -24,4 +24,7 @@ export default StyleSheet.create({
     borderRadius:4,
     borderWidth:0.5,
   },
+  container:{
+    marginTop: 10,
+  }
 })
