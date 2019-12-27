@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { Button, Header } from "react-native-elements";
-import MyBookings from "../Userside/BrowseServices";
+
+
 
 
 
@@ -66,4 +67,66 @@ export class MyBookings extends Component {
    }
 }
 
+const styles = StyleSheet.create({
+
+   rectanglemain: {
+
+       width: 329,
+       height: 160,
+       borderRadius: 25,
+       marginBottom: 20,
+       marginLeft: 14,
+       backgroundColor: "white",
+       shadowColor: "rgba(0, 0, 0, 0.05)",
+       shadowOffset: {
+           width: 0,
+           height: 2
+       },
+       shadowRadius: 5,
+       shadowOpacity: 1,
+       borderStyle: "solid",
+       borderWidth: 1,
+       borderColor: "#ececec"
+   },
+   Mobiletext: {
+       fontFamily: "Roboto",
+       paddingLeft: 15,
+       margin: 4,
+       fontWeight: "bold",
+       fontStyle: "normal",
+       lineHeight: 21,
+       letterSpacing: 0,
+       color: "#000000",
+       justifyContent: "space-between", textAlign: "justify", fontSize: 17
+   },
+   Mobileinnertext: {
+       paddingLeft: 15,
+       margin: 2,
+       fontWeight: "100",
+       fontStyle: "normal",
+       lineHeight: 21,
+       letterSpacing: 0,
+       color: "#000000",
+       justifyContent: "space-between", textAlign: "justify", fontSize: 14
+   },
+   Request: {
+       width: 104,
+       height: 40,
+       paddingTop: 10,
+       paddingBottom: 34,
+       borderRadius: 25,
+       marginLeft: 217,
+       backgroundColor: "white",
+       shadowColor: "rgba(0, 0, 0, 0.05)",
+       shadowOffset: {
+           width: 0,
+           height: 2
+       },
+       shadowRadius: 24,
+       shadowOpacity: 1,
+       borderStyle: "solid",
+       borderWidth: 3,
+       borderColor: "#ececec"
+   }
+})
 export default MyBookings;
